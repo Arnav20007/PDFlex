@@ -1,0 +1,10 @@
+/* Purged for PDFlex premium theme. All styles moved to index.css */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
