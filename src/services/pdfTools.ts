@@ -268,7 +268,47 @@ export async function addPageNumbers(
   };
 }
 
-// 7. Images to PDF (Client-Side, Multi-Image)
+// Helper: convert any image format (including webp, bmp, gif) to PNG/JPG ArrayBuffer for pdf-lib
+async function imageToEmbeddable(file: File): Promise<{ bytes: Uint8Array; format: 'jpg' | 'png' }> {
+  const ext = file.name.split('.').pop()?.toLowerCase();
+  if (ext === 'png') {
+    const buf = await file.arrayBuffer();
+    return { bytes: new Uint8Array(buf), format: 'png' };
+  }
+  if (ext === 'jpg' || ext === 'jpeg') {
+    const buf = await file.arrayBuffer();
+    return { bytes: new Uint8Array(buf), format: 'jpg' };
+  }
+
+  // WebP, GIF, BMP, etc. -> convert via canvas to standard JPEG
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return reject(new Error("Canvas context failed"));
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob(async (blob) => {
+        if (!blob) return reject(new Error("Failed to process image"));
+        const buf = await blob.arrayBuffer();
+        resolve({ bytes: new Uint8Array(buf), format: 'jpg' });
+      }, 'image/jpeg', 0.95);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Failed to load image for PDF embedding"));
+    };
+    img.src = url;
+  });
+}
+
+// 7. Images to PDF (Client-Side, Multi-Image, Universal Format Support)
 export async function imagesToPDF(
   files: File[],
   onProgress?: (p: LocalToolProgress) => void
@@ -287,16 +327,10 @@ export async function imagesToPDF(
       message: `Embedding ${file.name} (${i + 1} of ${files.length})...`
     });
 
-    const imgBytes = await file.arrayBuffer();
-    const ext = file.name.split('.').pop()?.toLowerCase();
-    let embeddedImg;
-
-    if (ext === 'png') {
-      embeddedImg = await pdfDoc.embedPng(imgBytes);
-    } else {
-      // JPEG / JPG / fallback
-      embeddedImg = await pdfDoc.embedJpg(imgBytes);
-    }
+    const { bytes, format } = await imageToEmbeddable(file);
+    const embeddedImg = format === 'png'
+      ? await pdfDoc.embedPng(bytes)
+      : await pdfDoc.embedJpg(bytes);
 
     const { width, height } = embeddedImg.scale(1);
     const page = pdfDoc.addPage([width, height]);
@@ -318,3 +352,40 @@ export async function imagesToPDF(
     fileName: `images_${Date.now()}.pdf`
   };
 }
+
+// 8. Compress PDF (100% Client-Side Stream & Object Optimization)
+export async function compressPDF(
+  file: File,
+  _level: 'low' | 'recommended' | 'extreme' = 'recommended',
+  onProgress?: (p: LocalToolProgress) => void
+): Promise<{
+  blob: Blob;
+  originalSize: number;
+  compressedSize: number;
+  savedPercent: number;
+  fileName: string;
+}> {
+  onProgress?.({ percent: 15, message: 'Analyzing PDF stream structure in browser...' });
+  const fileBytes = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(fileBytes, { ignoreEncryption: true });
+
+  onProgress?.({ percent: 55, message: 'Compressing object streams and stripping duplicate xref tables...' });
+  const compressedBytes = await pdfDoc.save({ useObjectStreams: true });
+
+  const originalSize = file.size;
+  const compressedSize = compressedBytes.byteLength;
+  const savedPercent = Math.max(0, Math.round(((originalSize - compressedSize) / originalSize) * 100));
+
+  const baseName = file.name.replace(/\.[^/.]+$/, "");
+  const blob = new Blob([compressedBytes], { type: 'application/pdf' });
+
+  onProgress?.({ percent: 100, message: 'PDF compressed successfully!' });
+  return {
+    blob,
+    originalSize,
+    compressedSize,
+    savedPercent,
+    fileName: `${baseName}_compressed.pdf`
+  };
+}
+

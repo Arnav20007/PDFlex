@@ -1,36 +1,37 @@
-import { Shield, Zap, Layout, Cloud, Lock, CheckCircle2 } from "lucide-react";
+// src/components/Features.tsx
+import { Shield, Zap, Lock, CheckCircle2, Laptop, Image as ImageIcon } from "lucide-react";
 
 export function Features() {
   const features = [
     {
       icon: <Lock className="w-5 h-5 text-emerald-600" />,
-      title: "Client-Side Privacy",
-      description: "Tools like Merge, Split, and Rotate process documents entirely in your web browser. No files are uploaded to any server."
-    },
-    {
-      icon: <Layout className="w-5 h-5 text-blue-600" />,
-      title: "Exact Formatting Preservation",
-      description: "Advanced conversions to Word, Excel, and PowerPoint retain fonts, tables, margins, and column layouts with high fidelity."
-    },
-    {
-      icon: <Cloud className="w-5 h-5 text-indigo-600" />,
-      title: "Automated Data Wiping",
-      description: "For cloud conversions, files are transferred over TLS encryption and automatically deleted from processing servers immediately."
+      title: "100% In-Browser Privacy",
+      description: "Every tool processes documents and images entirely in your web browser. No files are uploaded to any server."
     },
     {
       icon: <Zap className="w-5 h-5 text-amber-600" />,
-      title: "Fast & Lightweight",
-      description: "Optimized processing pipeline that converts most documents in under 10 seconds without bloated client libraries."
+      title: "Instant In-Memory Speed",
+      description: "Hardware-accelerated processing using HTML5 Canvas and client-side WebAssembly without upload or download wait times."
     },
     {
       icon: <Shield className="w-5 h-5 text-blue-600" />,
-      title: "Secure Architecture",
-      description: "Built with secure token proxying and zero client-side credential exposure, ensuring your conversions remain private."
+      title: "Zero Server Storage Risk",
+      description: "Your sensitive contracts, statements, and photos never leave your device, eliminating remote data leak vulnerabilities."
+    },
+    {
+      icon: <Laptop className="w-5 h-5 text-emerald-600" />,
+      title: "Works Across Devices",
+      description: "Fully responsive on desktop browsers, Android Chrome, and Apple Mobile Safari without installing native apps."
+    },
+    {
+      icon: <ImageIcon className="w-5 h-5 text-blue-600" />,
+      title: "Universal Image Formats",
+      description: "Easily handle JPG, PNG, modern WebP, GIF, and BMP files with quality sliders and aspect ratio locking."
     },
     {
       icon: <CheckCircle2 className="w-5 h-5 text-emerald-600" />,
       title: "No Sign-Up or Watermarks",
-      description: "Use all core tools right away without creating an account, entering an email, or receiving watermarked documents."
+      description: "Use all tools freely right away without creating an account, entering an email, or receiving watermarked documents."
     }
   ];
 
@@ -39,10 +40,10 @@ export function Features() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Built for reliability and privacy
+            Engineered for pure privacy and speed
           </h2>
           <p className="text-slate-500 max-w-xl mx-auto text-sm mt-2">
-            Every feature is engineered to provide straightforward document utilities without tracking or intrusive paywalls.
+            PDFlex runs entirely in your browser. No accounts, no subscriptions, and zero cloud uploads.
           </p>
         </div>
 

@@ -1,3 +1,4 @@
+// src/components/Navbar.tsx
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { FileText, Menu, X } from "lucide-react";
@@ -8,11 +9,11 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { label: "PDF to Word", href: "/pdf-to-word" },
     { label: "Merge PDF", href: "/merge-pdf" },
     { label: "Split PDF", href: "/split-pdf" },
-    { label: "Rotate PDF", href: "/rotate-pdf" },
-    { label: "Compress", href: "/compress-pdf" },
+    { label: "Compress Image", href: "/compress-image" },
+    { label: "Resize Image", href: "/resize-image" },
+    { label: "Images to PDF", href: "/images-to-pdf" },
   ];
 
   return (
@@ -54,7 +55,7 @@ const Navbar = () => {
             }}
             className="hidden sm:inline-flex bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-4 h-9 rounded-xl shadow-xs"
           >
-            Convert PDF
+            Start Tool
           </Button>
 
           <button
@@ -89,7 +90,7 @@ const Navbar = () => {
               }}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs h-9 rounded-lg"
             >
-              Convert PDF
+              Start Tool
             </Button>
           </div>
         </div>
