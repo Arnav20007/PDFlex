@@ -1,63 +1,49 @@
 // src/components/Features.tsx
-import { Shield, Zap, Lock, CheckCircle2, Laptop, Image as ImageIcon } from "lucide-react";
+import { Laptop, UserCheck, Smartphone } from "lucide-react";
 
 export function Features() {
-  const features = [
+  const points = [
     {
-      icon: <Lock className="w-5 h-5 text-emerald-600" />,
-      title: "100% In-Browser Privacy",
-      description: "Every tool processes documents and images entirely in your web browser. No files are uploaded to any server."
+      icon: <Laptop className="w-5 h-5 text-blue-600" />,
+      title: "No software to install",
+      description: "Open PDFlex in your browser and start working with your files immediately."
     },
     {
-      icon: <Zap className="w-5 h-5 text-amber-600" />,
-      title: "Instant In-Memory Speed",
-      description: "Hardware-accelerated processing using HTML5 Canvas and client-side WebAssembly without upload or download wait times."
+      icon: <UserCheck className="w-5 h-5 text-emerald-600" />,
+      title: "No account required",
+      description: "Use the available tools without creating an account or entering your email."
     },
     {
-      icon: <Shield className="w-5 h-5 text-blue-600" />,
-      title: "Zero Server Storage Risk",
-      description: "Your sensitive contracts, statements, and photos never leave your device, eliminating remote data leak vulnerabilities."
-    },
-    {
-      icon: <Laptop className="w-5 h-5 text-emerald-600" />,
-      title: "Works Across Devices",
-      description: "Fully responsive on desktop browsers, Android Chrome, and Apple Mobile Safari without installing native apps."
-    },
-    {
-      icon: <ImageIcon className="w-5 h-5 text-blue-600" />,
-      title: "Universal Image Formats",
-      description: "Easily handle JPG, PNG, modern WebP, GIF, and BMP files with quality sliders and aspect ratio locking."
-    },
-    {
-      icon: <CheckCircle2 className="w-5 h-5 text-emerald-600" />,
-      title: "No Sign-Up or Watermarks",
-      description: "Use all tools freely right away without creating an account, entering an email, or receiving watermarked documents."
+      icon: <Smartphone className="w-5 h-5 text-purple-600" />,
+      title: "Works on desktop and mobile",
+      description: "Use PDFlex from your computer, tablet, or phone."
     }
   ];
 
   return (
-    <section className="py-16 px-4 bg-white border-y border-slate-200/80">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Engineered for pure privacy and speed
-          </h2>
-          <p className="text-slate-500 max-w-xl mx-auto text-sm mt-2">
-            PDFlex runs entirely in your browser. No accounts, no subscriptions, and zero cloud uploads.
-          </p>
-        </div>
+    <section className="py-16 px-4 bg-slate-100/60 border-y border-slate-200">
+      <div className="max-w-4xl mx-auto text-center">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
+          PDF tools that work in your browser
+        </h2>
+        <p className="text-slate-600 text-sm max-w-2xl mx-auto mb-4 leading-relaxed">
+          PDFlex is designed for quick, everyday file tasks. Select a tool, add your file, make your changes, and download the result.
+        </p>
+        <p className="text-slate-500 text-xs max-w-xl mx-auto mb-10">
+          For browser-based tools, your files are processed locally on your device rather than uploaded to a server.
+        </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
+          {points.map((pt, idx) => (
             <div
-              key={index}
-              className="p-6 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 transition-all"
+              key={idx}
+              className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs"
             >
-              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-4 shadow-xs">
-                {feature.icon}
+              <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-4">
+                {pt.icon}
               </div>
-              <h3 className="text-base font-bold text-slate-900 mb-1.5">{feature.title}</h3>
-              <p className="text-slate-600 text-xs leading-relaxed">{feature.description}</p>
+              <h3 className="text-base font-bold text-slate-900 mb-1.5">{pt.title}</h3>
+              <p className="text-slate-600 text-xs leading-relaxed">{pt.description}</p>
             </div>
           ))}
         </div>

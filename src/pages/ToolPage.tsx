@@ -5,6 +5,7 @@ import ConversionUpload from "@/components/ConversionUpload";
 import { SEO } from "@/components/SEO";
 import { Laptop, HelpCircle } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { toolSeoData } from "@/data/toolSeoData";
 
 interface ToolPageProps {
   title: string;
@@ -14,15 +15,26 @@ interface ToolPageProps {
 
 const ToolPage = ({ title, description, toolType }: ToolPageProps) => {
   const location = useLocation();
+  const seoInfo = toolSeoData[toolType];
 
-  const faqs = [
+  const pageH1 = seoInfo?.h1 || `${title} Online for Free`;
+  const pageSubtitle = seoInfo?.subtitle || description;
+  const howToTitle = seoInfo?.howToTitle || `How to use ${title}`;
+
+  const steps = seoInfo?.steps || [
+    { title: "Select your file", desc: "Drag and drop your file into the designated area or click to select from your device." },
+    { title: "Choose options", desc: "Adjust settings if needed and click Process Locally. Your file is modified in browser memory." },
+    { title: "Download result", desc: "Your processed file will download automatically to your device without being uploaded to a server." }
+  ];
+
+  const faqs = seoInfo?.faqs || [
     {
       q: "Are my files uploaded to any server?",
       a: "No. All file processing happens entirely inside your web browser. Your documents and photos never leave your device."
     },
     {
       q: "Is there a file size limit?",
-      a: "PDFlex supports files up to 25 MB. This ensures fast, reliable in-memory processing without slowing down your browser."
+      a: "PDFlex supports files up to 25 MB for smooth in-browser performance."
     },
     {
       q: "Do I need to sign up or create an account?",
@@ -37,8 +49,8 @@ const ToolPage = ({ title, description, toolType }: ToolPageProps) => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <SEO
-        title={`${title} Online — Free & Fast`}
-        description={description}
+        title={`${pageH1} — PDFlex`}
+        description={pageSubtitle}
         canonicalPath={location.pathname}
       />
       <Navbar />
@@ -52,10 +64,10 @@ const ToolPage = ({ title, description, toolType }: ToolPageProps) => {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-3">
-            {title}
+            {pageH1}
           </h1>
           <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto leading-relaxed">
-            {description}
+            {pageSubtitle}
           </p>
         </div>
 
@@ -65,39 +77,19 @@ const ToolPage = ({ title, description, toolType }: ToolPageProps) => {
         {/* How it Works / Instructions */}
         <div className="max-w-4xl mx-auto px-4 mt-16 pt-12 border-t border-slate-200">
           <h2 className="text-xl font-bold text-slate-900 mb-6 text-center">
-            How to use {title}
+            {howToTitle}
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 font-bold text-sm flex items-center justify-center mb-3">
-                1
+          <div className={`grid grid-cols-1 md:grid-cols-${steps.length > 3 ? "4" : "3"} gap-5 text-left`}>
+            {steps.map((step, idx) => (
+              <div key={idx} className="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
+                <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 font-bold text-sm flex items-center justify-center mb-3">
+                  {idx + 1}
+                </div>
+                <h3 className="font-bold text-sm text-slate-900 mb-1">{step.title}</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">{step.desc}</p>
               </div>
-              <h3 className="font-bold text-sm text-slate-900 mb-1">Select File</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Drag and drop your file into the designated area or click to select from your device.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 font-bold text-sm flex items-center justify-center mb-3">
-                2
-              </div>
-              <h3 className="font-bold text-sm text-slate-900 mb-1">Process Locally</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Configure your options and click Process. The file is modified directly in browser memory with zero upload.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 font-bold text-sm flex items-center justify-center mb-3">
-                3
-              </div>
-              <h3 className="font-bold text-sm text-slate-900 mb-1">Download Instantly</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Your processed file will download automatically to your device.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
 
