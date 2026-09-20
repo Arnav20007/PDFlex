@@ -91,6 +91,16 @@ const App = () => (
             }
           />
           <Route
+            path="/page-numbers"
+            element={
+              <ToolPage
+                title="Page Numbers"
+                description="Add page numbering to your PDF documents with customizable start numbers."
+                toolType="page-numbers"
+              />
+            }
+          />
+          <Route
             path="/compress-pdf"
             element={
               <ToolPage
