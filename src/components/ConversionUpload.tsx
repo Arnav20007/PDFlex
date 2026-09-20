@@ -1042,19 +1042,30 @@ export const ConversionUpload = ({ toolType = "merge" }: ConversionUploadProps) 
                   {/* Actions Area */}
                   <div className="space-y-3 pt-4 border-t border-slate-100">
                     <Button
-                      onClick={handleProcess}
-                      disabled={converting || selectedFiles.length === 0}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs h-11 rounded-xl shadow-xs transition-colors"
+                      onClick={() => {
+                        if (selectedFiles.length === 0) {
+                          fileInputRef.current?.click();
+                        } else {
+                          handleProcess();
+                        }
+                      }}
+                      disabled={converting}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm h-12 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       {converting ? (
                         <>
                           <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                           {progressMessage || "Processing..."}
                         </>
+                      ) : selectedFiles.length === 0 ? (
+                        <>
+                          <Upload className="w-4 h-4" />
+                          Select File to Start
+                        </>
                       ) : (
                         <>
                           Process Locally
-                          <ArrowRight className="ml-2 h-4 w-4" />
+                          <ArrowRight className="w-4 h-4" />
                         </>
                       )}
                     </Button>
